@@ -73,26 +73,31 @@ fn main() {
     println!("Part 2 Result: {}", part_2_result);
 }
 
-fn get_test_data() -> Vec<Command> {
-    let test_commands: Vec<Command> = vec![
-        Command { direction: Direction::Forward, quantity: 5 },
-        Command { direction: Direction::Down, quantity: 5 },
-        Command { direction: Direction::Forward, quantity: 8 },
-        Command { direction: Direction::Up, quantity: 3 },
-        Command { direction: Direction::Down, quantity: 8 },
-        Command { direction: Direction::Forward, quantity: 2 },
-    ];
-    test_commands
-}
+#[cfg(test)]
+mod test {
+    use crate::*;
+    
+    fn get_test_data() -> Vec<Command> {
+        let test_commands: Vec<Command> = vec![
+            Command { direction: Direction::Forward, quantity: 5 },
+            Command { direction: Direction::Down, quantity: 5 },
+            Command { direction: Direction::Forward, quantity: 8 },
+            Command { direction: Direction::Up, quantity: 3 },
+            Command { direction: Direction::Down, quantity: 8 },
+            Command { direction: Direction::Forward, quantity: 2 },
+        ];
+        test_commands
+    }
 
-#[test]
-fn test_part_one() {
-    let test_commands = get_test_data();
-    assert_eq!(adjust_position(&test_commands), 150);
-}
+    #[test]
+    fn test_part_one() {
+        let test_commands = get_test_data();
+        assert_eq!(adjust_position(&test_commands), 150);
+    }
 
-#[test]
-fn test_part_two() {
-    let test_commands = get_test_data();
-    assert_eq!(adjust_position_with_aim(&test_commands), 900);
+    #[test]
+    fn test_part_two() {
+        let test_commands = get_test_data();
+        assert_eq!(adjust_position_with_aim(&test_commands), 900);
+    }
 }

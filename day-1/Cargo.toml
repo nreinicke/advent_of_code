@@ -1,6 +1,7 @@
 [package]
-name = "day-two"
+name = "day-2"
 version = "0.1.0"
+authors = ["nickreinicke"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
