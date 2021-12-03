@@ -1,12 +1,19 @@
-
-#[derive(Debug)]
 enum Direction {
     Forward,
     Down,
     Up
 }
 
-#[derive(Debug)]
+fn direction_from_string(s: &str) -> Result<Direction, &'static str> {
+        let direction  = match s {
+            "forward" => Ok(Direction::Forward),
+            "down" => Ok(Direction::Down),
+            "up" => Ok(Direction::Up),
+            _ => Err("error building direction") 
+        }; 
+        direction
+}
+
 struct Command {
     direction: Direction,
     quantity: usize,
@@ -20,12 +27,8 @@ impl Command {
 
         let quantity: usize = quantity_str.parse::<usize>().unwrap(); 
 
-        let direction: Direction = match direction_str {
-            "forward" => Direction::Forward,
-            "down" => Direction::Down,
-            "up" => Direction::Up,
-            _ => Direction::Forward
-        }; 
+        let direction = direction_from_string(direction_str).unwrap();
+
         Command {direction: direction, quantity: quantity}
     }
 }
