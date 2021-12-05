@@ -34,6 +34,23 @@ impl BingoBoard {
             }
         }
     }
+
+    fn is_winner(self) -> bool {
+        // check rows
+        for row in 0..5 {
+            if self.marked[row].iter().filter(|&m| *m).count() == 5 {
+                return true
+            }
+        }
+
+        // check columns
+        for col in 0..5 {
+            if self.marked.iter().filter(|&row| row[col]).count() == 5 {
+                return true
+            }
+        }
+        false
+    }
 }
 
 fn get_numbers_and_boards(file: &str) -> (Vec<usize>, Vec<BingoBoard>) {
@@ -66,6 +83,7 @@ mod test {
         let (numbers, boards) = get_numbers_and_boards(&"test_input.txt");
         for mut b in boards {
             b.play_number(22);
+            b.is_winner();
         }
     }
 
