@@ -1,3 +1,5 @@
+use std::fs;
+
 struct BingoBoard {
     values: Vec<Vec<usize>>,
     marked: Vec<Vec<bool>>,
@@ -18,6 +20,37 @@ impl BingoBoard {
             marked: vec![vec![false; 5]; 5],
         }
     }
+
+    fn play_number(&mut self, number: usize) {
+        for row in 0..5 {
+            for col in 0..5 {
+                let board_value: usize = self.values[row][col]; 
+                if board_value == number {
+                    self.marked[row][col] = true;
+
+                    // assume there is only one possible play
+                    break;
+                }
+            }
+        }
+    }
+}
+
+fn get_numbers_and_boards(file: &str) -> (Vec<usize>, Vec<BingoBoard>) {
+    let file_contents = fs::read_to_string(file).unwrap();
+    let input: Vec<&str> = file_contents 
+        .lines()
+        .filter(|l| l != &"")
+        .collect();
+    let numbers: Vec<usize> = input[0]
+        .split(",")
+        .map(|s| s.parse::<usize>().unwrap())
+        .collect();
+
+    let board_input: Vec<BingoBoard> =
+        input[1..].chunks(5).map(|c| BingoBoard::build(c)).collect();
+
+    (numbers, board_input)
 }
 
 fn main() {
@@ -27,25 +60,13 @@ fn main() {
 mod test {
     use crate::*;
 
-    fn get_numbers_and_boards() -> (Vec<usize>, Vec<BingoBoard>) {
-        let input: Vec<&str> = include_str!("../test_input.txt")
-            .lines()
-            .filter(|l| l != &"")
-            .collect();
-        let numbers: Vec<usize> = input[0]
-            .split(",")
-            .map(|s| s.parse::<usize>().unwrap())
-            .collect();
-
-        let board_input: Vec<BingoBoard> =
-            input[1..].chunks(5).map(|c| BingoBoard::build(c)).collect();
-
-        (numbers, board_input)
-    }
 
     #[test]
     fn test_part_one() {
-        let (n, b) = get_numbers_and_boards();
+        let (numbers, boards) = get_numbers_and_boards(&"test_input.txt");
+        for mut b in boards {
+            b.play_number(22);
+        }
     }
 
     #[test]
