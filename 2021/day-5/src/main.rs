@@ -1,46 +1,63 @@
 use std::fs;
 
-struct Plane {
-    plane: Vec<Vec<usize>>,
-}
-#[derive(Debug)]
-struct Line {
-    u: [usize; 2],
-    v: [usize; 2],
+struct Canvas {
+    surface: Vec<Vec<usize>>,
 }
 
-impl Plane {
+#[derive(Debug)]
+struct Point {
+    x: isize,
+    y: isize
+}
+
+#[derive(Debug)]
+struct Line {
+    u: Point,
+    v: Point,
+}
+
+impl Canvas {
     fn new(size: usize) -> Self {
-        Plane {
-            plane: vec![vec![0; size]; size],
+        Canvas {
+            surface: vec![vec![0; size]; size],
         }
     }
+    // fn add_line(&mut self, line: &Line) {
+        
+    // }
 }
 
 impl Line {
     fn from_str(s: &str) -> Self {
         let uv: Vec<&str> = s.split(" -> ").collect();
-        let u: Vec<usize> = uv[0]
+        let u: Vec<isize> = uv[0]
             .split(",")
-            .map(|s| s.parse::<usize>().unwrap())
+            .map(|s| s.parse::<isize>().unwrap())
             .collect();
-        let v: Vec<usize> = uv[1]
+        let v: Vec<isize> = uv[1]
             .split(",")
-            .map(|s| s.parse::<usize>().unwrap())
+            .map(|s| s.parse::<isize>().unwrap())
             .collect();
         Line {
-            u: [u[0], u[1]],
-            v: [v[0], v[1]],
+            u: Point {x: u[0], y: u[1]},
+            v: Point {x: v[0], y: v[1]},
         }
     }
-    fn is_horizontal(&self) -> bool {
-        if self.u[0] == self.v[0] {
+    fn slope(&self) -> Option<isize> {
+        if self.is_vertical() {
+            return None
+        }
+        let slope = (self.v.y - self.u.y) / (self.v.x - self.u.x);
+        Some(slope)
+    }
+    fn is_vertical(&self) -> bool {
+        if self.u.x == self.v.x {
             return true;
         }
         false
     }
-    fn is_vertical(&self) -> bool {
-        if self.u[1] == self.v[1] {
+    fn is_horizontal(&self) -> bool {
+        if self.u.y == self.v.y {
             return true;
         }
         false
@@ -63,7 +80,10 @@ mod test {
             .map(|s| Line::from_str(s))
             .filter(|l| l.is_horizontal() || l.is_vertical())
             .collect();
-        println!("{:?}", lines);
+        for l in lines {
+            println!("{:?}", l);
+            println!("{:?}", l.slope());
+        }
     }
 
     #[test]
